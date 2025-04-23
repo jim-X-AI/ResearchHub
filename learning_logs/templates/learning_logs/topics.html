@@ -1,0 +1,68 @@
+{% extends 'ecommerce_app/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4 display-4 fw-bold">Your Learning Topics</h1>
+
+    <ul class="list-group mb-4">
+        {% for topic in topics %}
+            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap shadow-lg p-3 mb-2 rounded">
+                <a href="{% url 'learning_logs:topic' topic.id %}" class="text-decoration-none text-primary flex-grow-1 me-2">{{ topic.text }}</a>
+                <div class="btn-group" role="group">
+                    <a href="{% url 'learning_logs:edit_topic' topic.id %}" class="btn btn-warning btn-sm me-2">Edit</a>
+                    <a href="{% url 'learning_logs:delete_topic' topic.id %}" class="btn btn-danger btn-sm">Delete</a>
+                </div>
+            </li>
+        {% empty %}
+            <li class="list-group-item text-muted text-center">No topics have been added yet.</li>
+        {% endfor %}
+    </ul>
+
+    <div class="d-flex justify-content-center flex-wrap">
+        <a href="{% url 'learning_logs:new_topic' %}" class="btn btn-cta btn-primary me-2 mb-2">🆕 Add a New Topic</a>
+        <a href="{% url 'learning_logs:share_learning' %}" class="btn btn-secondary me-2 mb-2">📢 Share</a>
+        <a href="{% url 'learning_logs:learning_entries' %}" class="btn btn-outline-secondary mb-2">📖 Check</a>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #ffffff; /* White background */
+        color: #000; /* Black text color */
+    }
+
+    .list-group-item {
+        transition: transform 0.3s ease, background-color 0.3s ease;
+        background-color: #f8f9fa; /* Light background for list items */
+    }
+
+    .list-group-item:hover {
+        transform: translateY(-5px);
+        background-color: #e2e6ea; /* Slightly darker on hover */
+    }
+
+    .text-primary {
+        color: #007bff; /* Blue text color for topics */
+    }
+
+    .btn-cta {
+        background-color: #007bff; /* Primary color */
+        color: #fff;
+    }
+
+    .btn-cta:hover {
+        background-color: #0056b3; /* Darker shade for hover */
+    }
+
+    /* Responsive styles */
+    @media (max-width: 768px) {
+        .list-group-item {
+            flex-direction: column;
+            text-align: center;
+        }
+        .btn-group {
+            margin-top: 10px;
+        }
+    }
+</style>
+{% endblock content %}

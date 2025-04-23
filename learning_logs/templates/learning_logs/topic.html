@@ -1,0 +1,42 @@
+
+{% extends 'ecommerce_app/base.html' %}
+
+{% block page_header %}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12">
+      <h1 class="display-4">Topic: {{ topic.text }}</h1>
+    </div>
+  </div>
+</div>
+{% endblock page_header %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h4">Entries:</h2>
+        <a href="{% url 'learning_logs:new_entry' topic.id %}" class="btn btn-primary">Add New Entry</a>
+      </div>
+
+      {% for entry in entries %}
+      <div class="card mb-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">{{ entry.date|date:'M d, Y H:i' }}</h4>
+          <a href="{% url 'learning_logs:edit_entry' entry.id %}" class="btn btn-sm btn-outline-secondary">Edit Entry</a>
+        </div>
+        <div class="card-body">
+          <p class="card-text">{{ entry.text|linebreaks }}</p>
+        </div>
+      </div>
+      {% empty %}
+      <div class="alert alert-warning" role="alert">
+        There are no entries for this topic yet.
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock content %}
+<!--API-KEY=AIzaSyBQwJSdWAWaXEk8qF5xDRoqsqOe6dPCLMg-->

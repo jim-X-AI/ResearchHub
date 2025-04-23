@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="ResearchHub - A platform for researchers to buy books, track learning, and discover resources.">
+    <meta name="keywords" content="Research, Books, Learning, Resources, Academic">
+    <meta name="author" content="JimX">
+    <title>{% block title %}ResearchHub{% endblock title %}</title>
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load static %}
+
+    <!-- Add any custom styles here -->
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+    <style>
+        /* Global Styles */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 0 1rem;
+        }
+
+        .navbar-brand {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .navbar-nav .nav-item .nav-link {
+            font-size: 1rem;
+        }
+
+        /* Navbar spacing */
+        .navbar-collapse {
+            justify-content: space-between;
+        }
+
+        .navbar-toggler {
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-nav {
+            gap: 1rem;
+        }
+
+        /* Footer styles */
+        footer {
+            background-color: #f8f9fa;
+            padding: 1.5rem 0;
+            border-top: 1px solid #e9ecef;
+            color: #6c757d;
+            text-align: center;
+        }
+
+        footer a {
+            color: #007bff;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        footer .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        /* Improved content styling */
+        .page-header {
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        /* Utility for responsive text */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Media Queries for Responsive Design */
+        @media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+
+            .navbar-nav .nav-item .nav-link {
+                font-size: 0.9rem;
+            }
+
+            .page-header {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .navbar-brand {
+                font-size: 1.25rem;
+            }
+
+            .navbar-nav .nav-item .nav-link {
+                font-size: 0.85rem;
+            }
+
+            .page-header {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <noscript>
+        <div class="alert alert-danger text-center" role="alert">
+            JavaScript is required to run this application. Please enable JavaScript in your browser settings.
+        </div>
+    </noscript>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-md navbar-light bg-light mb-4 border">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'ecommerce_app:index' %}" aria-label="Home">
+                ResearchHub
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarCollapse" aria-controls="navbarCollapse"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    <!-- Placeholder for additional nav items -->
+                </ul>
+                <ul class="navbar-nav ms-auto mb-2 mb-md-0">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <span class="navbar-text me-2">Hello, {{ user.username }}.</span>
+                        </li>
+                        <li class="nav-item">
+                            <form action="{% url 'accounts:logout' %}" method="post" class="d-inline">
+                                {% csrf_token %}
+                                <button name="submit" class="btn btn-outline-secondary btn-sm">
+                                    Log out
+                                </button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'accounts:login' %}">Log in</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'accounts:register' %}">Register</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="pb-2 mb-2 border-bottom page-header">
+            {% block page_header %}{% endblock page_header %}
+        </div>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; <span id="currentYear"></span> ResearchHub. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
+        </div>
+        <p class="mt-2">Developed by JimX</p>
+    </footer>
+
+    <script>
+        // Set the current year dynamically
+        document.getElementById("currentYear").textContent = new Date().getFullYear();
+        // Add any additional JavaScript here
+    </script>
+</body>
+</html>

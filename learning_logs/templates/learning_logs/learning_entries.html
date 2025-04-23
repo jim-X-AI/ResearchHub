@@ -1,0 +1,21 @@
+{% extends "ecommerce_app/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Learning Entries</h2>
+    <ul class="list-group">
+        {% for entry in entries %}
+        <li class="list-group-item">
+            <h5 class="mb-2">{{ entry.topic }}</h5>
+            <p>{{ entry.entry }}</p>
+            <small class="text-muted">
+                Posted by {{ entry.user }} on {{ entry.date|date:"M d, Y H:i" }}
+            </small>
+        </li>
+        {% empty %}
+        <li class="list-group-item">
+            <p class="mb-0">No entries yet.</p>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

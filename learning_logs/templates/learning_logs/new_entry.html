@@ -1,0 +1,23 @@
+{% extends "ecommerce_app/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2 class="mb-4">
+                <a href="{% url 'learning_logs:topic' topic.id %}" class="text-decoration-none">{{ topic.text }}</a>
+            </h2>
+
+            <h3 class="h5 mb-3">Add a New Entry:</h3>
+
+            <form action="{% url 'learning_logs:new_entry' topic.id %}" method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    {{ form.as_p }}
+                </div>
+                <button type="submit" class="btn btn-primary">Add Entry</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

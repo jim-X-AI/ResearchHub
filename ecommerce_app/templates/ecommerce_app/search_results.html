@@ -1,0 +1,257 @@
+<style>
+    .book-card {
+        transition: transform 0.3s ease; /* Smooth transition for scaling */
+    }
+
+    .book-card:hover {
+        transform: scale(1.05); /* Scale up on hover */
+    }
+</style>
+
+{% extends 'ecommerce_app/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Search Form -->
+    <form method="GET" action="{% url 'ecommerce_app:search_books' %}" class="d-flex mb-4 search-form">
+        <input type="text" name="query" class="form-control me-2" placeholder="What are you looking for?" value="{{ query }}">
+        <select name="search_by" class="form-select me-2">
+            <option value="title" {% if search_by == 'title' %}selected{% endif %}>Title</option>
+            <option value="isbn" {% if search_by == 'isbn' %}selected{% endif %}>ISBN</option>
+            <option value="author" {% if search_by == 'author' %}selected{% endif %}>Author</option>
+            <option value="description" {% if search_by == 'description' %}selected{% endif %}>Description</option>
+        </select>
+        <button type="submit" class="btn btn-primary">🔍 Search Now!</button>
+    </form>
+
+    <!-- Page Header -->
+    <h2 class="mb-4 text-center">{{ query|default:"Most Rated Books" }}</h2>
+
+    <!-- Books Display Section -->
+    {% if books %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for book in books %}
+                <div class="col">
+                    <div class="card h-100 shadow-lg rounded-3 book-card">
+                        <img src="{{ book.thumbnail }}" class="card-img-top rounded-top" alt="Thumbnail of {{ book.title }}" style="height: 200px; object-fit: cover;">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ book.title }}</h5>
+                            <p class="card-text"><strong>Author:</strong> {{ book.author }}</p>
+                            <p class="card-text"><strong>Published:</strong> {{ book.published_date }}</p>
+                            <p class="card-text">
+                                {{ book.description|truncatechars:100 }}
+                                {% if book.description|length > 100 %}
+                                    <a href="#" class="read-more-link text-primary" data-bs-toggle="modal" data-bs-target="#descriptionModal{{ forloop.counter }}"> Read more</a>
+                                {% endif %}
+                            </p>
+                            <div class="mt-auto text-center">
+                                <!-- Buy on dropdown -->
+                                <div class="dropdown w-100 mb-2">
+                                    <a class="btn btn-warning w-100 shadow-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-shopping-cart"></i> Buy on 🛒
+                                    </a>
+                                    <ul class="dropdown-menu w-100 text-center">
+                                        {% if book.amazon_url %}
+                                            <li>
+                                                <a class="dropdown-item btn-amazon" href="{{ book.amazon_url }}" target="_blank">
+                                                    <i class="fas fa-shopping-cart"></i> Amazon
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if book.ebay_url %}
+                                            <li>
+                                                <a class="dropdown-item btn-ebay" href="{{ book.ebay_url }}" target="_blank">
+                                                    <i class="fab fa-ebay"></i> eBay
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if book.barnes_and_noble_url %}
+                                            <li>
+                                                <a class="dropdown-item btn-barnes-noble" href="{{ book.barnes_and_noble_url }}" target="_blank">
+                                                    <i class="fab fa-barnes-noble"></i> Barnes & Noble
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if book.book_depository_url %}
+                                            <li>
+                                                <a class="dropdown-item btn-depository" href="{{ book.book_depository_url }}" target="_blank">
+                                                    <i class="fas fa-book-open"></i> Book Depository
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if book.books_a_million_url %}
+                                            <li>
+                                                <a class="dropdown-item btn-books-million" href="{{ book.books_a_million_url }}" target="_blank">
+                                                    <i class="fas fa-store"></i> Books-A-Million
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+
+                                <!-- Download on dropdown -->
+                                <div class="dropdown w-100 mb-2">
+                                    <a class="btn btn-dark w-100 shadow-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-download"></i> Download on 📥
+                                    </a>
+                                    <ul class="dropdown-menu w-100 text-center">
+                                        {% if book.zlib_url %}
+                                            <li>
+                                                <a class="dropdown-item btn-zlib" href="{{ book.zlib_url }}" target="_blank">
+                                                    <i class="fas fa-file-pdf"></i> Z-Lib
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if book.libary_genesis_url %}
+                                            <li>
+                                                <a class="dropdown-item btn-libgen" href="{{ book.libary_genesis_url }}" target="_blank">
+                                                    <i class="fas fa-book"></i> Library Genesis
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if book.pdf_drive_url %}
+                                            <li>
+                                                <a class="dropdown-item btn-pdf-drive" href="{{ book.pdf_drive_url }}" target="_blank">
+                                                    <i class="fas fa-file-alt"></i> PDF Drive
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if book.project_gutenberg_url %}
+                                            <li>
+                                                <a class="dropdown-item btn-gutenberg" href="{{ book.project_gutenberg_url }}" target="_blank">
+                                                    <i class="fas fa-book-reader"></i> Project Gutenberg
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if book.open_libary_url %}
+                                            <li>
+                                                <a class="dropdown-item btn-open-library" href="{{ book.open_libary_url }}" target="_blank">
+                                                    <i class="fas fa-library"></i> Open Library
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if book.google_scholar_url %}
+                                            <li>
+                                                <a class="dropdown-item btn-google-scholar" href="{{ book.google_scholar_url }}" target="_blank">
+                                                    <i class="fas fa-graduation-cap"></i> Google Scholar
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if book.internet_archive_url %}
+                                            <li>
+                                                <a class="dropdown-item btn-internet-archive" href="{{ book.internet_archive_url }}" target="_blank">
+                                                    <i class="fas fa-archive"></i> Internet Archive
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+
+                                <!-- Read on dropdown -->
+                                <div class="dropdown w-100 mb-2">
+                                    <a class="btn btn-info w-100 shadow-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-book-open"></i> Read on 📖
+                                    </a>
+                                    <ul class="dropdown-menu w-100 text-center">
+                                        {% if book.scribd %}
+                                            <li>
+                                                <a class="dropdown-item btn-scribd" href="{{ book.scribd }}" target="_blank">
+                                                    <i class="fab fa-scribd"></i> Scribd
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if book.kobo_books %}
+                                            <li>
+                                                <a class="dropdown-item btn-kobo" href="{{ book.kobo_books }}" target="_blank">
+                                                    <i class="fas fa-tablet-alt"></i> Kobo Books
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if book.audible_url %}
+                                            <li>
+                                                <a class="dropdown-item btn-audible" href="{{ book.audible_url }}" target="_blank">
+                                                    <i class="fas fa-headphones-alt"></i> Audible
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        {% if book.barnes_nobles %}
+                                            <li>
+                                                <a class="dropdown-item btn-barnes-nobles" href="{{ book.barnes_nobles }}" target="_blank">
+                                                    <i class="fab fa-barnes-noble"></i> Barnes & Noble
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal for Full Description -->
+                <div class="modal fade" id="descriptionModal{{ forloop.counter }}" tabindex="-1" aria-labelledby="descriptionModalLabel{{ forloop.counter }}" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="descriptionModalLabel{{ forloop.counter }}">{{ book.title }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>{{ book.description }}</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center">No books found matching your query.</p>
+    {% endif %}
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1&query={{ query }}&search_by={{ search_by }}" aria-label="First">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}&query={{ query }}&search_by={{ search_by }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <li class="page-item active" aria-current="page">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}&query={{ query }}&search_by={{ search_by }}">{{ num }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}&query={{ query }}&search_by={{ search_by }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&query={{ query }}&search_by={{ search_by }}" aria-label="Last">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endblock content %}

@@ -1,0 +1,144 @@
+# Django and Python specific ignores
+*.pyc
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.sqlite3
+*.sqlite
+db.sqlite3
+db.sqlite3-journal
+local_settings.py
+*.log
+
+# Virtual environment
+ll_env/
+
+# Build and distribution directories
+build/
+dist/
+*.egg-info/
+*.egg
+.installed.cfg
+*.manifest
+*.spec
+
+# PyInstaller files
+hook/
+*.spec
+
+# FFmpeg binaries
+ffmpeg-master-latest-win64-gpl/
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# System files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Python packaging
+*.egg-info/
+.eggs/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test and coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Debug files
+*.log
+*.pot
+*.mo
+
+# Custom project ignores
+# (Add any additional project-specific ignores here)
+# ================================
+# Core Exclusions
+# ================================
+
+# Virtual environment
+ll_env/
+
+# FFmpeg binaries and docs
+ffmpeg-master-latest-win64-gpl/
+
+# Build artifacts
+build/
+dist/
+*.spec
+*.pyc
+__pycache__/
+
+# Database files
+*.sqlite3
+*.db
+db.sqlite3
+
+# Python packaging
+*.egg-info/
+.eggs/
+*.egg
+
+# ================================
+# System/IDE Files
+# ================================
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+Thumbs.db
+
+# ================================
+# Python Specific
+# ================================
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ================================
+# Environment Files
+# ================================
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# ================================
+# Django Specific
+# ================================
+local_settings.py
+*.log
+
+# ================================
+# PyInstaller
+# ================================
+hook/
+*.manifest
