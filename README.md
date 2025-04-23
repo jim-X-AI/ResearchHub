@@ -162,6 +162,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - GitHub: [@jim-X-AI](https://github.com/jim-X-AI)  
 - Email: [jamiuabdulazeez689@gmail.com]
-- X:
-  [jamiuOladi55000]
+- **X (Twitter):** [@JamiuOladi55000](https://x.com/JamiuOladi55000)
+
 ```
